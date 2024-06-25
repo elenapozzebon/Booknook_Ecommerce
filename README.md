@@ -1,7 +1,7 @@
 # Progetto-Basi-di-Dati
 Progetto di basi di dati 2024, secondo anno università. E-commerce di libri.
 
-# 1. Pianificazione
+## 1. Pianificazione
 Crea una directory per il progetto con sottocartelle per il front-end, back-end, database, e documentazione.
 
 # 2. Progettazione del Database
