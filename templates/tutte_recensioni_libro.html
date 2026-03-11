@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Recensioni Libro</title>
+</head>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        margin: 0;
+        padding: 0;
+        background: linear-gradient(336deg, rgba(240, 147, 43, .8), rgba(240, 147, 43, 0) 70.71%),
+                    linear-gradient(127deg, rgba(106, 173, 206, .8), rgba(106, 173, 206, 0) 70.71%),
+                    linear-gradient(217deg, rgba(38, 68, 102, .8), rgba(38, 68, 102, 0) 70.71%);
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+        color: #333;
+    }
+
+        header {
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 20px;
+            height: 200px;
+            position: relative;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            justify-content: center;
+        }
+
+        .header-left img {
+            width: 150px;
+            height: 150px;
+            margin-right: 10px;
+            border-radius: 50%;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .header-left img:hover {
+            transform: scale(1.1); /* Effetto zoom */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Effetto ombra */
+        }
+
+    main {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 20px;
+    }
+
+    .product-review {
+        background-color: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        max-width: 1200px;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 15px; /* Distanza tra le recensioni */
+    }
+
+    /* Titolo delle recensioni */
+    .product-review h2 {
+        font-size: 1.5rem;
+        font-weight: bold;
+        margin-bottom: 10px; /* Distanza ridotta dal resto */
+        color: #2c3e50;
+    }
+
+    /* Box delle recensioni */
+    .product-review .review-box {
+        background-color: #f9f9f9;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        padding: 20px;
+        margin-bottom: 15px; /* Distanza ridotta tra i box delle recensioni */
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .product-review .review-box p {
+        margin: 10px 0;
+        font-size: 1rem;
+        color: #555;
+    }
+
+    .product-review .review-box .user-name {
+        font-weight: bold;
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        color: #333;
+    }
+
+    .product-review .review-box .description {
+        margin-top: 10px; /* Distanza ridotta dalla descrizione */
+        font-size: 1rem;
+        line-height: 1.5;
+        color: #666;
+        font-style: italic;
+    }
+
+    /* Pulsante per tornare indietro alla pagina del prodotto */
+    .back-to-product {
+        text-align: center;
+        margin-top: 15px; /* Distanza ridotta dal resto */
+    }
+
+    .btn-reviews {
+        background-color: #264466;
+        color: white;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        font-size: 1rem;
+        font-weight: bold;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-reviews:hover {
+        background-color: #3A6F91;
+    }
+
+    /* Media queries per dispositivi mobili */
+    @media (max-width: 768px) {
+        .product-review {
+            padding: 20px;
+        }
+
+        .btn-reviews {
+            width: 100%;
+        }
+    }
+
+    /*stelline*/
+    .rating {
+        display: flex;
+    }
+
+    .rating i {
+        font-size: 24px;
+        color: #f1c40f;
+        margin-right: 5px;
+    }
+
+    .rating i.inactive {
+        color: #ccc;
+    }
+
+    footer {
+        background: none;
+        color: #264466;
+        text-align: center;
+        padding: 20px;
+    }
+</style>
+<body>
+    <header>
+        <div class="header-left">
+            <a href="{% if cosa_sono %}{{ url_for('solo_venditore') }}{% else %}{{ url_for('solo_compratore') }}{% endif %}">
+                <img src="{{ url_for('static', filename='img/logo2.jpg') }}" alt="BookNook Logo">
+            </a>
+        </div>
+    </header>
+    <main>
+        <div class="product-review">
+            <h2>Tutte le recensioni del libro<p>{{ libro.titolo }}</p></h2>
+            {% for recensione, libro in recensioni_libro %}
+            <div class="review-box">
+                <p class="user-name">{{ recensione.id_utente }}</p>
+                <div class="rating">
+                    {% for i in range(1, 6) %}
+                        <i class="fa fa-star {% if i > recensione.valutazione %}inactive{% endif %}"></i>
+                    {% endfor %}
+                </div>
+                <p class="description">{{ recensione.descrizione }}</p>
+            </div>
+            {% endfor %}
+
+            <!-- Pulsante per tornare indietro alla pagina del prodotto -->
+            <div class="back-to-product">
+                <a href="{{ url_for('info_libro', id_libro=libro.id_libro, id_venditore=id_venditore) }}" class="btn-reviews">Torna alla pagina del prodotto</a>
+            </div>
+        </div>
+    </main>
+    <footer>
+        &copy; 2024 BookNook - Tutti i diritti riservati
+    </footer>
+</body>
+</html>

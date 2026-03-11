@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Le mie Recensioni</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(336deg, rgba(231, 90, 12, .8), rgba(231, 90, 12, 0) 70.71%),
+                        linear-gradient(127deg, rgba(102, 194, 207, .8), rgba(102, 194, 207, 0) 70.71%),
+                        linear-gradient(217deg, rgba(17, 57, 73, .8), rgba(17, 57, 73, 0) 70.71%);
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 20px;
+            height: 200px;
+            position: relative;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            justify-content: center;
+        }
+
+        .header-left img {
+            width: 150px;
+            height: 150px;
+            margin-right: 10px;
+            border-radius: 50%;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .header-left img:hover {
+            transform: scale(1.1); /* Effetto zoom */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Effetto ombra */
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+            padding: 40px;
+        }
+
+        .content {
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h2 {
+            color: #2c3e50;
+            text-align: center;
+        }
+
+        .recensione {
+            background-color: #f9f9f9;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 20px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        .recensione strong {
+            margin-bottom: 40px; /* Spazio sotto l'elemento */
+            display: inline; /* Mantiene il testo su una singola riga */
+        }
+
+        .valutazione {
+            font-size: 20px;
+            color: #f1c40f;
+            margin-bottom: 10px;
+        }
+
+        .recensioni-espandibili {
+            max-height: 0; /* Inizialmente chiusa */
+            opacity: 0; /* Inizialmente invisibile */
+            visibility: hidden; /* Nasconde il contenuto */
+            overflow: hidden; /* Nasconde il contenuto in eccesso */
+            transition: max-height 0.5s ease, opacity 0.5s ease; /* Transizioni fluide */
+        }
+
+        .recensioni-espandibili.expanding {
+            max-height: 500px; /* Imposta un'altezza massima quando espansa */
+            opacity: 1; /* Rende visibile il contenuto */
+            visibility: visible; /* Rende visibile il contenuto */
+        }
+
+        .recensioni-espandibili.expanding {
+            max-height: 400px; /* Altezza massima per lo scroll */
+            opacity: 1;
+            visibility: visible;
+            overflow-y: auto; /* Abilita lo scrolling verticale */
+        }
+
+        .mostra-recensioni {
+            cursor: pointer;
+            color: white;
+            background-color: #3498db;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-align: center;
+            display: block;
+            margin: 20px auto;
+            width: fit-content;
+        }
+
+        .mostra-recensioni:hover {
+            background-color: #2471a3;
+        }
+
+        .rating {
+            display: flex;
+        }
+
+        .rating i {
+            font-size: 24px;
+            color: #f1c40f;
+            margin-right: 5px;
+        }
+
+        .rating i.inactive {
+            color: #ccc;
+        }
+
+        footer {
+            background: none;
+            color: #264466;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+    <script>
+        function toggleRecensioniEspandibili(id) {
+            var recensioniEspandibili = document.getElementById(id);
+            recensioniEspandibili.classList.toggle('expanding'); // Aggiungi o rimuovi la classe 'expanding'
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <a href="{% if cosa_sono %}{{ url_for('solo_venditore') }}{% else %}{{ url_for('solo_compratore') }}{% endif %}">
+                <img src="{{ url_for('static', filename='img/logo2.jpg') }}" alt="BookNook Logo">
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <div class="content">
+            <section>
+                <h2>Le mie Recensioni</h2>
+                <div class="recensioni-espandibili" id="mieRecensioni">
+                    {% if mie_recensioni %}
+                        {% for recensione, titolo_libro in mie_recensioni %}
+                            <div class="recensione">
+                                <div class="rating">
+                                    {% for i in range(1, 6) %}
+                                        <i class="fa fa-star {% if i > recensione.valutazione %}inactive{% endif %}"></i>
+                                    {% endfor %}
+                                </div>
+                                <br><strong>Valutazione:</strong> {{ recensione.valutazione }}/5<br>
+                                <strong>Descrizione:</strong> {{ recensione.descrizione }}<br>
+                                <strong>Libro:</strong> {{ titolo_libro }}<br><br>
+                                <strong>Venduto da:</strong> {{ recensione.id_venditore }}<br>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>Non hai ancora effettuato recensioni.</p>
+                    {% endif %}
+                </div>
+                <button class="mostra-recensioni" onclick="toggleRecensioniEspandibili('mieRecensioni')">
+                    Mostra/Nascondi tutte le mie recensioni
+                </button>
+            </section>
+
+            {% if is_venditore %}
+            <section>
+                <h2>Le mie Recensioni Ricevute</h2>
+                <div class="recensioni-espandibili" id="recensioniRicevute">
+                    {% if mie_recensioni_ricevute %}
+                        {% for recensione, titolo_libro in mie_recensioni_ricevute %}
+                            <div class="recensione">
+                                <div class="rating">
+                                    {% for i in range(1, 6) %}
+                                        <i class="fa fa-star {% if i > recensione.valutazione %}inactive{% endif %}"></i>
+                                    {% endfor %}
+                                </div>
+                                <br><strong>Valutazione:</strong> {{ recensione.valutazione }}/5<br>
+                                <strong>Descrizione:</strong> {{ recensione.descrizione }}<br>
+                                <strong>Libro:</strong> {{ titolo_libro }}<br><br>
+                                <strong>Acquistato da:</strong> {{ recensione.id_utente }}<br>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>Non hai ricevuto recensioni.</p>
+                    {% endif %}
+                </div>
+                <button class="mostra-recensioni" onclick="toggleRecensioniEspandibili('recensioniRicevute')">
+                    Mostra/Nascondi tutte le recensioni ricevute
+                </button>
+            </section>
+            {% endif %}
+        </div>
+    </main>
+    <footer>
+        &copy; 2024 BookNook - Tutti i diritti riservati
+    </footer>
+</body>
+</html>

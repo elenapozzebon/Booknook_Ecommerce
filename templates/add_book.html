@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aggiungi Libro</title>
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            color: #333;
+            padding: 0;
+            background: linear-gradient(336deg, rgba(231, 90, 12, .8), rgba(231, 90, 12, 0) 70.71%),
+                        linear-gradient(127deg, rgba(102, 194, 207, .8), rgba(102, 194, 207, 0) 70.71%),
+                        linear-gradient(217deg, rgba(17, 57, 73, .8), rgba(17, 57, 73, 0) 70.71%);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 20px;
+            height: 200px;
+            position: relative;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            justify-content: center;
+        }
+
+        .header-left img {
+            width: 150px;
+            height: 150px;
+            margin-right: 10px;
+            border-radius: 50%;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .header-left img:hover {
+            transform: scale(1.1); /* Effetto zoom */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Effetto ombra */
+        }
+
+        .container {
+            width: 50%;
+            margin: 2rem auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        input, select, textarea, button {
+            padding: 0.75rem;
+            font-size: 1rem;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        label {
+            font-weight: bold;
+        }
+        .submit-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            padding: 0.75rem;
+            font-size: 1rem;
+            border-radius: 4px;
+        }
+        .submit-button:hover {
+            background-color: #45a049;
+        }
+
+        .flashes {
+            list-style-type: none;
+            padding: 0;
+            margin: 1rem 0;
+        }
+        .flashes li {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #f5c6cb;
+            border-radius: 4px;
+        }
+
+        footer {
+            background: none;
+            color: #264466;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+    <script>
+        // JavaScript per popolare automaticamente i campi se un libro, autore o categoria esiste
+        function populateFields(selectId, fieldIds) {
+            var selectedValue = document.getElementById(selectId).value;
+            if (selectedValue !== "") {
+                var selectedData = selectedValue.split('|');
+                fieldIds.forEach(function(id, index) {
+                    document.getElementById(id).value = selectedData[index] || '';
+                });
+            }
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <a href="{{ url_for('solo_venditore') }}">
+                <img src="./static/img/logo2.jpg" alt="BookNook Logo">
+            </a>
+        </div>
+    </header>
+
+
+    <main>
+        <div class="container">
+            <!-- Mostrare i messaggi flash -->
+            {% with messages = get_flashed_messages() %}
+              {% if messages %}
+                <ul class="flashes">
+                  {% for message in messages %}
+                    <li>{{ message }}</li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            {% endwith %}
+
+            <h1>Aggiungi un Nuovo Libro</h1>
+            <form method="POST" action="{{ url_for('add_book') }}">
+                <!-- Selezione del libro se esistente -->
+                <label for="libro">Seleziona un libro esistente:</label>
+                <select id="libro" name="libro" onchange="populateFields('libro', ['titolo', 'edizione', 'anno', 'descrizione', 'casa_editrice'])">
+                    <option value="">-- Seleziona un libro --</option>
+                    {% for libro in libri %}
+                    <option value="{{ libro.titolo }}|{{ libro.edizione }}|{{ libro.anno }}|{{ libro.descrizione }}|{{ libro.casa_editrice }}">
+                        {{ libro.titolo }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <!-- Campi per il libro -->
+                <label for="titolo">Titolo:</label>
+                <input type="text" id="titolo" name="titolo" required>
+
+                <label for="edizione">Edizione:</label>
+                <input type="text" id="edizione" name="edizione" required>
+
+                <label for="anno">Anno di Pubblicazione:</label>
+                <input type="number" id="anno" name="anno" required>
+
+                <label for="descrizione">Descrizione:</label>
+                <textarea id="descrizione" name="descrizione" rows="4" maxlength="400" required></textarea>
+
+                <label for="casa_editrice">Casa Editrice:</label>
+                <input type="text" id="casa_editrice" name="casa_editrice" required>
+
+                <!-- Selezione dell'autore se esistente -->
+                <label for="autore">Seleziona un autore esistente:</label>
+                <select id="autore" name="autore" onchange="populateFields('autore', ['autore_nome', 'autore_cognome', 'autore_anno_nascita', 'autore_descrizione'])">
+                    <option value="">-- Seleziona un autore --</option>
+                    {% for autore in autori %}
+                    <option value="{{ autore.nome }}|{{ autore.cognome }}|{{ autore.anno_nascita }}|{{ autore.descrizione }}">
+                        {{ autore.nome }} {{ autore.cognome }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <!-- Campi per l'autore -->
+                <label for="autore_nome">Nome Autore:</label>
+                <input type="text" id="autore_nome" name="autore_nome" required>
+
+                <label for="autore_cognome">Cognome Autore:</label>
+                <input type="text" id="autore_cognome" name="autore_cognome" required>
+
+                <label for="autore_anno_nascita">Anno di Nascita:</label>
+                <input type="number" id="autore_anno_nascita" name="autore_anno_nascita">
+
+                <label for="autore_descrizione">Descrizione Autore:</label>
+                <textarea id="autore_descrizione" name="autore_descrizione" rows="3" maxlength="400"></textarea>
+
+                <!-- Selezione della categoria se esistente -->
+                <label for="categoria">Seleziona una categoria esistente:</label>
+                <select id="categoria" name="categoria" onchange="populateFields('categoria', ['categoria_nome'])">
+                    <option value="">-- Seleziona una categoria --</option>
+                    {% for categoria in categorie %}
+                    <option value="{{ categoria.nome_categoria }}">
+                        {{ categoria.nome_categoria }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <!-- Campo per la categoria -->
+                <label for="categoria_nome">Nome Categoria:</label>
+                <input type="text" id="categoria_nome" name="categoria_nome" required>
+
+                <!-- Altri campi per il venditore -->
+                <label for="quantita">Quantità:</label>
+                <input type="number" id="quantita" name="quantita" required>
+
+                <label for="prezzo">Prezzo (€):</label>
+                <input type="number" id="prezzo" name="prezzo" step="0.01" required>
+
+                <label for="stato_nuovo">Stato del libro (Nuovo):</label>
+                <select id="stato_nuovo" name="stato_nuovo">
+                    <option value="Si">Si</option>
+                    <option value="No">No</option>
+                </select>
+
+                <button type="submit" class="submit-button">Aggiungi Libro</button>
+            </form>
+        </div>
+    </main>
+    <footer>
+        &copy; 2024 BookNook - Tutti i diritti riservati
+    </footer>
+</body>
+</html>

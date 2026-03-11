@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dettagli Prodotto</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(336deg, rgba(240, 147, 43, .8), rgba(240, 147, 43, 0) 70.71%),
+                        linear-gradient(127deg, rgba(106, 173, 206, .8), rgba(106, 173, 206, 0) 70.71%),
+                        linear-gradient(217deg, rgba(38, 68, 102, .8), rgba(38, 68, 102, 0) 70.71%);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        header {
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 20px;
+            height: 200px;
+            position: relative;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            justify-content: center;
+        }
+
+        .header-left img {
+            width: 150px;
+            height: 150px;
+            margin-right: 10px;
+            border-radius: 50%;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .header-left img:hover {
+            transform: scale(1.1); /* Effetto zoom */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Effetto ombra */
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+        }
+
+        .content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            max-width: 1200px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            gap: 40px;
+        }
+
+        .product-details, .product-description {
+            flex: 2;
+        }
+
+        .product-actions {
+            flex: 1;
+            background-color: #e0e0e0;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            height: 250px;
+        }
+
+        h1 {
+            color: #264466;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .product-details p {
+            font-size: 18px;
+            margin: 10px 0;
+            color: #555;
+        }
+
+        .product-details p strong {
+            color: #264466;
+        }
+
+        .product-description h2 {
+            color: #264466;
+            border-bottom: 2px solid #eee;
+            padding-bottom: 10px;
+        }
+
+        .product-actions h2 {
+            color: #264466;
+            margin-bottom: 15px;
+        }
+
+        .product-actions form {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .product-actions label {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .product-actions input[type="number"] {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 25px;
+            width: 100%;
+            max-width: 200px;
+            margin-bottom: 20px;
+        }
+
+        .product-actions button {
+            background-color: #264466;
+            color: white;
+            padding: 15px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            width: 100%;
+            max-width: 250px;
+            transition: background-color 0.3s;
+        }
+
+        .product-actions button:hover {
+            background-color: #3A6F91;
+        }
+
+        footer {
+            background: none;
+            color: #264466;
+            text-align: center;
+            padding: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .product-actions, .product-details {
+                width: 100%;
+            }
+        }
+        /* gestisco l'errore */
+        ul {
+            list-style-type: none; /* Rimuove i punti dalla lista */
+            padding: 0; /* Rimuove il padding */
+            margin: 20px 0; /* Margine sopra e sotto la lista */
+        }
+
+        li {
+            padding: 10px; /* Padding interno */
+            margin-bottom: 10px; /* Spazio tra i messaggi */
+            border-radius: 5px; /* Angoli arrotondati */
+            color: black; /* Colore del testo */
+        }
+
+        li.success {
+            background-color: #4caf50; /* Verde per i messaggi di successo */
+        }
+
+        li.error {
+            background-color: #f44336; /* Rosso per i messaggi di errore */
+        }
+
+        li.warning {
+            background-color: #ff9800; /* Arancione per i messaggi di avviso */
+        }
+
+        li.info {
+            background-color: #2196f3; /* Blu per i messaggi informativi */
+        }
+
+        /* Aggiungi una transizione per un effetto più fluido */
+        li {
+            transition: opacity 0.5s ease-in-out;
+        }
+
+        /*Recensioni*/
+        .product-review {
+            margin-top: 20px;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .product-review h2 {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .product-review .review-box {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .product-review .review-box p {
+            margin: 10px 0;
+            font-size: 1rem;
+            color: #555;
+        }
+
+        .product-review .review-box .user-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            color: #333;
+        }
+
+        .product-review .review-box .rating {
+            font-size: 1.2rem;
+            color: #f39c12; /* colore delle stelline */
+        }
+
+        .product-review .review-box .description {
+            margin-top: 15px;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #666;
+            font-style: italic;
+        }
+
+        /* Stelline di valutazione */
+        .star-rating {
+            color: #f39c12; /* colore delle stelline */
+        }
+
+        .star-rating .fa-star {
+            margin-right: 5px;
+        }
+
+        .stars .fa-star {
+        color: gold; /* Colore per le stelle attive */
+    }
+
+        .stars .inactive {
+            color: lightgray; /* Colore per le stelle inattive */
+        }
+
+        /*Pulsante tutte le recensioni*/
+        .view-all-reviews {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .btn-reviews {
+            background-color: #2c3e50;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        .btn-reviews:hover {
+            background-color: #1a252f;
+        }
+
+        /*stelline*/
+        .rating {
+            display: flex;
+        }
+
+        .rating i {
+            font-size: 24px;
+            color: #f1c40f;
+            margin-right: 5px;
+        }
+
+        .rating i.inactive {
+            color: #ccc;
+        }
+
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <a href="{% if cosa_sono %}{{ url_for('solo_venditore') }}{% else %}{{ url_for('solo_compratore') }}{% endif %}">
+                <img src="{{ url_for('static', filename='img/logo2.jpg') }}" alt="BookNook Logo">
+            </a>
+        </div>
+    </header>
+    <main>
+        <div class="content">
+            <div class="product-details">
+                <h1>{{ libro.titolo }}</h1>
+                <div class="stars">
+                    {% if libro.media_valutazione is none %}
+                        <p><i>Ancora nessuna recensione</i></p>
+                    {% else %}
+                        {% for i in range(1, 6) %}
+                            <i class="fa fa-star {% if i > (libro.media_valutazione | round(0, 'ceil')) %}inactive{% endif %}"></i>
+                        {% endfor %}
+                    {% endif %}
+                </div>
+                <p><strong>Autore:</strong> {{ libro.nome }} {{ libro.cognome }}</p>
+                <p><strong>Categoria:</strong> {{ libro.nome_categoria }}</p>
+                <p><strong>Editore:</strong> {{ libro.casa_editrice }}</p>
+                <p><strong>Anno di pubblicazione:</strong> {{ libro.anno }}</p>
+                <p><strong>Prezzo:</strong> €{{ libro.prezzo }}</p>
+                <p><strong>Quantità disponibile:</strong> {{ libro.quantita }}</p>
+                <p><strong>Condizione:</strong> {{ 'Nuovo' if libro.stato_nuovo else 'Usato' }}</p>
+                <p><strong>Venduto da:</strong> {{ libro.nome_venditore }} {{ libro.cognome_venditore }} - <a href="mailto:{{ libro.email }}">Contatta il venditore</a></p>
+                <div class="product-description">
+                    <h2>Descrizione</h2>
+                    <p>{{ libro.descrizione }}</p>
+                </div>
+                <div class="product-review">
+                    <h2>Recensioni</h2>
+                    {% for recensione in recensioni_libro[:4] %}
+                    <div class="review-box">
+                        <p class="user-name">{{ recensione.id_utente }}</p>
+                        <div class="rating">
+                            {% for i in range(1, 6) %}
+                                <i class="fa fa-star {% if i > recensione.valutazione %}inactive{% endif %}"></i>
+                            {% endfor %}
+                        </div>
+                        <p class="description">{{ recensione.descrizione }}</p>
+                    </div>
+                    {% endfor %}
+                    <!-- Pulsante per vedere tutte le recensioni -->
+                    <div class="view-all-reviews">
+                        <a href="{{ url_for('tutte_recensioni_libro', id_libro=libro.id_libro, id_venditore=libro.id_venditore) }}" class="btn-reviews">Vedi tutte le recensioni</a>
+                    </div>
+                </div>
+
+            </div>
+            <div class="product-actions">
+                <h2>Aggiungi al Carrello</h2>
+                <form action="/aggiungi_al_carrello" method="post">
+                    <input type="hidden" name="id_libro" value="{{ libro.id_libro }}">
+                    <input type="hidden" name="id_venditore" value="{{ libro.id_venditore }}">
+                    <label for="quantita">Quantità:</label>
+                    <input type="number" id="quantita" name="quantita" min="1" max="{{ libro.quantita }}">
+                    <button type="submit">Aggiungi al Carrello</button>
+                </form>
+                {% with messages = get_flashed_messages(with_categories=True) %}
+                    {% if messages %}
+                        <ul>
+                        {% for category, message in messages %}
+                            <li class="{{ category }}">{{ message }}</li>
+                        {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+    </main>
+    <footer>
+        &copy; 2024 BookNook - Tutti i diritti riservati
+    </footer>
+</body>
+</html>

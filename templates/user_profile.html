@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profilo Utente</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            color: #333;
+            padding: 0;
+            background: linear-gradient(336deg, rgba(231, 90, 12, .8), rgba(231, 90, 12, 0) 70.71%),
+                        linear-gradient(127deg, rgba(102, 194, 207, .8), rgba(102, 194, 207, 0) 70.71%),
+                        linear-gradient(217deg, rgba(17, 57, 73, .8), rgba(17, 57, 73, 0) 70.71%);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 20px;
+            height: 200px;
+            position: relative;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            justify-content: center;
+        }
+
+        .header-left img {
+            width: 150px;
+            height: 150px;
+            margin-right: 10px;
+            border-radius: 50%;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .header-left img:hover {
+            transform: scale(1.1); /* Effetto zoom */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Effetto ombra */
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 40px;
+        }
+
+        .content {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 {
+            color: #2c3e50;
+            font-size: 28px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-section {
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #3498db;
+            font-size: 22px;
+            margin-bottom: 15px;
+        }
+
+        p {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+
+        label {
+            display: block;
+            font-size: 16px;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        input[type="text"], input[type="date"] {
+            width: 96%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        input[type="submit"] {
+            background-color: #3498db;
+            color: white;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 99%;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #2980b9;
+        }
+
+        form {
+            background-color: #f9f9f9;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+
+            input[type="submit"] {
+                width: 99%;
+            }
+        }
+
+        footer {
+            background: none;
+            color: #264466;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="header-left">
+            <a href="{% if cosa_sono %}{{ url_for('solo_venditore') }}{% else %}{{ url_for('solo_compratore') }}{% endif %}">
+                <img src="{{ url_for('static', filename='img/logo2.jpg') }}" alt="BookNook Logo">
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <div class="content">
+            <h1>Profilo di {{ user.nome }} {{ user.cognome }}</h1>
+            <div class="profile-section">
+                <h2>Informazioni Personali</h2>
+                <p><strong>Email:</strong> {{ user.email }}</p>
+                <p><strong>Data di Nascita:</strong> {{ user.data_nascita }}</p>
+                <p><strong>Indirizzo:</strong> {{ user.indirizzo }}</p>
+                <p><strong>Numero di Telefono:</strong> {{ user.telefono }}</p>
+                <p><strong>Sei loggato come:</strong> {{ 'Venditore' if user.venditore else 'Consumatore' }}</p>
+            </div>
+
+            <button id="modifica-profilo-btn" class="btn-modifica-profilo">Modifica profilo</button>
+
+            <!-- Sezione nascosta inizialmente -->
+            <div id="modifica-profilo" style="display: none;">
+                <h2>Modifica Informazioni Personali</h2>
+                <form action="{{ url_for('modifica_profilo') }}" method="POST">
+                    <label for="nome">Nome:</label>
+                    <input type="text" id="nome" name="nome" value="{{ user.nome }}">
+
+                    <label for="cognome">Cognome:</label>
+                    <input type="text" id="cognome" name="cognome" value="{{ user.cognome }}">
+
+                    <label for="data_nascita">Data di nascita:</label>
+                    <input type="date" id="data_nascita" name="data_nascita" value="{{ user.data_nascita }}">
+
+                    <label for="indirizzo">Indirizzo:</label>
+                    <input type="text" id="indirizzo" name="indirizzo" value="{{ user.indirizzo }}">
+
+                    <label for="telefono">Numero di telefono:</label>
+                    <input type="text" id="telefono" name="telefono" value="{{ user.telefono }}">
+
+                    <input type="submit" value="Aggiorna">
+                </form>
+            </div>
+            <style>
+                .btn-modifica-profilo {
+                    background-color: #007bff; /* Colore blu */
+                    color: white;
+                    padding: 10px 20px;
+                    font-size: 16px;
+                    font-weight: bold;
+                    border: 2px solid transparent;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    transition: background-color 0.3s ease, border-color 0.3s ease, transform 0.2s ease;
+                }
+
+                .btn-modifica-profilo:hover {
+                    background-color: #0056b3; /* Colore più scuro al passaggio del mouse */
+                    border-color: #0056b3;
+                    transform: scale(1.05); /* Effetto di ingrandimento */
+                }
+
+                .btn-modifica-profilo:active {
+                    background-color: #004085; /* Colore più scuro quando cliccato */
+                    border-color: #004085;
+                    transform: scale(0.98); /* Rimpicciolimento leggero quando cliccato */
+                }
+            </style>
+            <!-- JavaScript per mostrare/nascondere la sezione -->
+            <script>
+                document.getElementById('modifica-profilo-btn').addEventListener('click', function() {
+                    var modificaSezione = document.getElementById('modifica-profilo');
+                    if (modificaSezione.style.display === 'none') {
+                        modificaSezione.style.display = 'block';
+                    } else {
+                        modificaSezione.style.display = 'none';
+                    }
+                });
+            </script>
+        </div>
+    </main>
+    <footer>
+        &copy; 2024 BookNook - Tutti i diritti riservati
+    </footer>
+</body>
+</html>

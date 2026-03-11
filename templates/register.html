@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrazione - BookNook</title>
+
+    <style>
+    body {
+        background: linear-gradient(336deg, rgba(231, 90, 12, .8), rgba(231, 90, 12, 0) 70.71%),
+                    linear-gradient(127deg, rgba(102, 194, 207, .8), rgba(102, 194, 207, 0) 70.71%),
+                    linear-gradient(217deg, rgba(17, 57, 73, .8), rgba(17, 57, 73, 0) 70.71%);
+        font-family: 'Roboto', sans-serif;
+        margin: 0;
+        padding: 0;
+        color: #333;
+    }
+
+    .menu {
+        background-color: #FFFFFF; /* sfondo menù */
+        position: fixed;
+        width: 100%;
+        padding: 15px 0;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        color: #025159;
+        display: flex;
+        justify-content: center;
+        z-index: 1000;
+        margin: 0;
+    }
+
+    .menu a {
+        text-decoration: none;
+        color: #025159;
+        margin: 0 15px;
+        font-weight: bold;
+        transition: color 0.3s;
+    }
+
+    .menu a:hover {
+        color: #113949;
+    }
+
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        /*align-items: center;*/
+        height: 100vh;
+        padding: 80px 1px 1px;
+    }
+
+    .form-wrapper {
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 1050px;
+        display: flex;
+        /*justify-content: space-between;*/
+        position: relative;
+        flex-direction: column;
+        /*align-items: center;*/
+    }
+
+    .form-wrapper a {
+        position: absolute;
+        top: -70px;
+        left: 10px;
+        text-decoration: none;
+        color: #FFFFFF;
+        background-color: #1B5C75;
+        border: none;
+        border-radius: 20px;
+        padding: 10px 25px;
+        margin: 10px 0;
+        cursor: pointer;
+        transition: background-color 0.3s;
+    }
+
+    .form-wrapper a:hover {
+        background-color: #113949;
+    }
+
+    .form-blocks {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .form-block {
+        width: 48%;
+    }
+
+    h2 {
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    label {
+        font-weight: bold;
+        color: #555;
+        margin-bottom: 5px;
+    }
+
+    input[type="text"], input[type="password"], input[type="number"], input[type="date"], [type="email"], [type="tel"] {
+        padding: 15px;
+        border: 1px solid #ddd;
+        border-radius: 25px;
+        margin-bottom: 20px;
+        width: 97%;
+        box-sizing: border-box;
+    }
+
+    .radio-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+
+    .radio-group input[type="radio"] {
+        display: none;
+    }
+
+    .radio-group label {
+        position: relative;
+        padding-left: 35px;
+        margin-right: 20px;
+        cursor: pointer;
+        font-size: 16px;
+        user-select: none;
+    }
+
+    .radio-group label:before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background-color: #ddd;
+    }
+
+    .radio-group input[type="radio"]:checked+label:before {
+        background-color: #3498db;
+    }
+
+    .submit-button/*input[type="submit"]*/ {
+        background-color: #e75a0c;
+        color: white;
+        padding: 10px;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        text-align: center;
+        display: block;
+        width: 200px;
+        box-sizing: border-box;
+        margin: 20px auto 0;
+        font-size: 18px;
+    }
+
+    .submit-button:hover/*input[type="submit"]:hover*/ {
+        background-color: #E7360C;
+    }
+
+    </style>
+
+</head>
+
+<body>
+    <div class="container">
+        <form action="/register" method="post" onsubmit="return validateForm()">
+            <div class="form-wrapper">
+                <a href="/"> « Torna al Login</a>
+                <div class="form-blocks">
+                    <div class="form-block">
+                        <h2>Dati Utente</h2>
+                        <label for="email">Email:</label>
+                        <input type="email" id="email" name="email" required onblur="checkEmail()">
+                        <span id="email-error" style="color: red; display: none;">Email già registrata!</span><br>
+
+                        <label for="password">Password:</label>
+                        <input type="password" id="password" name="password" required>
+
+                        <label id="venditore">Venditore:</label><br><br>
+                        <div class="radio-group" required>
+                            <input type="radio" id="si" name="venditore" value="Si" required>
+                            <label for="si">Si</label>
+                            <input type="radio" id="no" name="venditore" value="No">
+                            <label for="no">No</label>
+                        </div>
+                        <br>
+                        {% if error %}<h4>{{ error }}</h4>{% endif %}
+                    </div>
+
+                    <div class="form-block">
+                        <h2>Dati Personali</h2>
+                        <label for="nome">Nome:</label>
+                        <input type="text" id="nome" name="nome" required>
+
+                        <label for="cognome">Cognome:</label>
+                        <input type="text" id="cognome" name="cognome" required>
+
+                        <label for="indirizzo">Indirizzo:</label>
+                        <input type="text" id="indirizzo" name="indirizzo">
+
+                        <label for="telefono">Telefono:</label>
+                        <input type="tel" id="telefono" name="telefono">
+
+                        <label for="data_nascita">Data di Nascita:</label>
+                        <input type="date" id="data_nascita" name="data_nascita">
+                    </div>
+                </div>
+                <input type="submit" value="Registrati" class="submit-button">
+            </div>
+        </form>
+    </div>
+
+    <script>
+        async function checkEmail() {
+            const email = document.getElementById('email').value;
+            const response = await fetch(`/check_email?email=${encodeURIComponent(email)}`);
+            const data = await response.json();
+            const emailError = document.getElementById('email-error');
+
+            if (data.exists) {
+                emailError.style.display = 'block';
+            } else {
+                emailError.style.display = 'none';
+            }
+        }
+
+        function validateForm() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const nome = document.getElementById('nome').value;
+            const cognome = document.getElementById('cognome').value;
+
+            // Controllo validità password
+            const passwordPattern = /^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{8,})/;
+            if (!passwordPattern.test(password)) {
+                alert("La password deve avere almeno 8 caratteri, " +
+                      "inclusi un numero, una lettera maiuscola, " +
+                      "una lettera minuscola e un carattere speciale.");
+                return false;
+            }
+
+            // Controllo campi obbligatori
+            if (!email || !nome || !cognome) {
+                alert("Tutti i campi obbligatori devono essere compilati.");
+                return false;
+            }
+
+            return true;
+        }
+    </script>
+</body>
+</html>

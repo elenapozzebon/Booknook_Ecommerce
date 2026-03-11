@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BookNook</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<link href="https://cdn.jsdelivr.net/npm/nouislider@15.6.0/dist/nouislider.min.css" rel="stylesheet">
+<!-- noUiSlider JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/nouislider@15.6.0/dist/nouislider.min.js"></script>
+
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        margin: 0;
+        color: #333;
+        padding: 0;
+        background: linear-gradient(336deg, rgba(231, 90, 12, .8), rgba(231, 90, 12, 0) 70.71%),
+                    linear-gradient(127deg, rgba(102, 194, 207, .8), rgba(102, 194, 207, 0) 70.71%),
+                    linear-gradient(217deg, rgba(17, 57, 73, .8), rgba(17, 57, 73, 0) 70.71%);
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+    header {
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 30px 20px;
+        height: 200px;
+        position: relative;
+    }
+
+    .header-left {
+        display: flex;
+        align-items: center;
+        position: absolute;
+        justify-content: center;
+    }
+
+    .header-left img {
+        width: 150px;
+        height: 150px;
+        margin-right: 10px;
+        border-radius: 50%;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .header-left img:hover {
+        transform: scale(1.1); /* Effetto zoom */
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Effetto ombra */
+    }
+
+    main {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex: 1;
+        padding: 20px;
+    }
+
+    .content {
+        background-color: #FFFFFF;
+        padding: 40px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        width: 100%;
+        max-width: 1200px;
+        position: relative;
+        margin-top: -50px;
+    }
+
+    .header-right {
+        display: flex;
+        align-items: center;
+        position: absolute;
+        right: 20px;
+        top: 20px;
+    }
+
+    .img_carrello{
+        width: 50px;
+        height: 30px;
+        margin-left: 20px;
+    }
+
+    .img_profilo{
+        width: 60px;
+        height: 60px;
+        margin-left: 20px;
+    }
+
+
+    .header-right .dropdown {
+        position: relative;
+        display: inline-block;
+    }
+
+    .header-right .dropdown-content {
+        display: none;
+        position: absolute;
+        background-color: white;
+        min-width: 160px;
+        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+        z-index: 1;
+        right: 0;
+    }
+
+    .header-right .dropdown-content a {
+        color: black;
+        padding: 12px 16px;
+        text-decoration: none;
+        display: block;
+    }
+
+    .header-right .dropdown-content a:hover {
+        background-color: #ddd;
+    }
+
+    .header-right .dropdown:hover .dropdown-content {
+        display: block;
+    }
+
+    .search-bar {
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .search-bar input {
+        width: 60%;
+        padding: 10px;
+        margin-right: 10px;
+    }
+
+    .search-bar button {
+        padding: 10px;
+    }
+
+    section {
+        padding: 20px;
+        margin-bottom: 20px;
+    }
+
+    footer {
+        background-color: #333;
+        color: white;
+        text-align: center;
+        padding: 10px;
+    }
+
+    #filters {
+        display: none;
+        background: rgba(255, 255, 255, 0.95);
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+        max-width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        font-family: 'Roboto', sans-serif;
+        transition: all 0.3s ease;
+    }
+
+    .filter-group {
+        margin-bottom: 20px;
+    }
+
+    .filter-group label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 8px;
+        color: #333;
+    }
+
+    .filter-group select,
+    .filter-group input[type="number"] {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        font-size: 16px;
+        transition: border-color 0.3s ease;
+    }
+
+    .filter-group select:focus,
+    .filter-group input[type="number"]:focus {
+        border-color: #e75a0c;
+        outline: none;
+    }
+
+    .filter-group input::placeholder {
+        color: #aaa;
+    }
+
+    .filter-button {
+        background-color: #1B5C75;;
+        color: white;
+        border: none;
+        padding: 12px;
+        font-size: 16px;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, box-shadow 0.2s ease;
+        width: 100%;
+        margin-top: 15px;
+    }
+
+    .filter-button:hover {
+        background-color: #113949;;
+        box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    @media (min-width: 768px) {
+        .filter-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .filter-group label {
+            margin-bottom: 0;
+            margin-right: 20px;
+        }
+
+        .filter-group select,
+        .filter-group input[type="number"] {
+            width: auto;
+            flex: 1;
+        }
+
+        .filter-button {
+            width: auto;
+            display: inline-block;
+            margin-top: 0;
+        }
+    }
+
+    /* Libri valutazioni */
+
+    .top-rated-books {
+        max-width: 1600px; /* Larghezza massima del contenitore */
+        margin-left: 0; /* Allineato a sinistra */
+        margin-right: auto; /* Comportamento flessibile */
+        background-color: #f9f9f9;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    ul {
+        display: flex; /* Rende l'elenco un contenitore flessibile */
+        flex-wrap: wrap; /* Permette di andare a capo quando non c'è spazio */
+        list-style-type: none; /* Rimuove i pallini dalla lista */
+        padding: 0; /* Rimuove il padding predefinito */
+        margin: 0; /* Rimuove il margine predefinito */
+    }
+
+    li {
+        flex: 1 1 calc(50% - 10px); /* Adatta la larghezza a seconda dello spazio disponibile */
+        margin: 5px; /* Margine tra i libri */
+    }
+
+    .book-item {
+        background-color: white;
+        border-radius: 8px;
+        padding: 15px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        height: auto; /* Altezza automatica per adattarsi al contenuto */
+        display: flex; /* Per migliorare la disposizione interna */
+        flex-direction: column; /* Per disporre il contenuto in colonna */
+    }
+
+    .book-item:last-child {
+        margin-right: 0; /* Rimuove il margine a destra per l'ultimo elemento */
+    }
+
+    .book-item h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: bold;
+    }
+
+    .book-item p {
+        margin: 5px 0;
+        font-size: 14px;
+    }
+
+    section {
+        display: block;
+        margin-bottom: 20px;
+    }
+
+    h2 {
+        text-align: left;
+    }
+
+    .container {
+        display: flex;
+        justify-content: flex-start; /* Allinea gli elementi a sinistra */
+        align-items: flex-start;
+    }
+
+    #top-rated-books {
+        width: 96%;
+    }
+
+    .stars .fa-star {
+        color: gold; /* Colore per le stelle attive */
+    }
+
+    .stars .inactive {
+        color: lightgray; /* Colore per le stelle inattive */
+    }
+
+    footer {
+        background: none;
+        color: #264466;
+        text-align: center;
+        padding: 20px;
+    }
+
+        .popup-notification {
+        position: fixed;
+        top: 20%;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: #fff;
+        border: 2px solid #ccc;
+        border-radius: 10px;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+        padding: 20px;
+        width: 300px;
+        z-index: 1000;
+        text-align: center;
+        font-family: 'Arial', sans-serif;
+    }
+
+    /* Stile per il pulsante "OK" */
+    .popup-notification button {
+        background-color: orangered;
+        color: white;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .popup-notification button:hover {
+        background-color: darkred;
+    }
+
+    /* Stile per il titolo */
+    .popup-notification h1 {
+        font-size: 18px;
+        font-style: italic;
+        margin-bottom: 10px;
+    }
+
+    .popup-notification p {
+        font-size: 14px;
+        color: #333;
+        margin-bottom: 20px;
+    }
+
+    /*Filtro Prezzo*/
+    .filter-group {
+        max-width: 600px; /* Limitiamo la larghezza del contenitore */
+        margin: 0 auto;   /* Centra il contenuto */
+        padding: 20px;
+    }
+
+    #priceSlider {
+        width: 100%; /* Slider si adatta alla larghezza disponibile */
+    }
+
+    /* Stile per i testi del prezzo */
+    .filter-group div {
+        display: flex;
+        justify-content: space-between;
+        font-size: 16px;
+        /*margin-top: 10px;  Spazio tra lo slider e i valori */
+    }
+
+    /* Responsività per schermi piccoli */
+    @media (max-width: 600px) {
+        .price-values {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    }
+
+
+    .price-values {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background-color: #f8f9fa; /* Colore di sfondo chiaro */
+        border: 1px solid #ced4da; /* Bordo sottile e grigio */
+        border-radius: 5px; /* Angoli arrotondati */
+        padding: 10px 20px; /* Spaziatura interna */
+        font-family: 'Arial', sans-serif;
+        font-size: 16px;
+        color: #495057; /* Colore del testo grigio scuro */
+        box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Ombra leggera per effetto rilievo */
+        margin-top: -10px;
+    }
+
+    .price-values span {
+        font-weight: bold;
+        color: #007bff; /* Colore blu per evidenziare i valori */
+    }
+
+    .price-values::before {
+        content: "\f0d7"; /* Icona FontAwesome per decorazione */
+        font-family: 'FontAwesome';
+        color: #6c757d; /* Colore dell'icona */
+        margin-right: 8px;
+    }
+
+    .price-values span::after {
+        content: " €"; /* Aggiunge il simbolo Euro dopo i valori */
+        font-weight: normal;
+        color: #495057;
+    }
+
+    @media (max-width: 600px) {
+        .price-values {
+            flex-direction: column; /* Dispone gli elementi verticalmente su schermi piccoli */
+            text-align: center;
+        }
+    }
+
+</style>
+
+<body>
+    <header>
+        <div class="header-left">
+            <img src="./static/img/logo2.jpg" alt="BookNook Logo">
+        </div>
+    </header>
+    <main>
+
+        {% if notifiche_attive %}
+            <div id="popup-notification" class="popup-notification">
+                <h1>Notifica</h1>
+                <p>Lo stato di un tuo ordine è cambiato!<br>premi "chiudi" per togliere la notifica</p>
+                <form method="POST" action="{{ url_for('chiudi_notifiche') }}">
+                    <button type="submit">Chiudi</button>
+                </form>
+            </div>
+        {% endif %}
+
+        <div class="content">
+            <!-- GESTIONE CARRELLO E PROFILO -->
+            <div class="header-right">
+                <a href="{{ url_for('carrello') }}"><img src="./static/img/carrello.png" alt="Cart" class="img_carrello"></a>
+                <div class="dropdown">
+                    <a href="#"><img src="./static/img/profilo.png" alt="Profile" class="img_profilo"></a>
+                    <div class="dropdown-content">
+                        <a href="user_profile">Il mio profilo</a>
+                        <a href="visualizza_ordini">I miei ordini</a>
+                        <a href="le_mie_recensioni">Le mie recensioni</a>
+                        <a href="\">Logout</a>
+                    </div>
+                </div>
+            </div>
+            <!-- GESTIONE BARRA DI RICERCA -->
+            <div class="search-bar">
+                <form action="{{ url_for('search_books') }}" method="POST">
+                    <input type="text" name="query" placeholder="Cerca un libro...">
+                    <button type="submit">Cerca</button>
+                    <button type="button" onclick="toggleFilters()">Filtri</button>
+                </form>
+            </div>
+            <!-- GESTIONE DEI FILTRI -->
+            <div id="filters" style="display: none;">
+                <form action="{{ url_for('search_books') }}" method="POST">
+                    <div class="filter-group">
+                        <label for="editore">Casa Editrice:</label>
+                        <select name="editore" id="editore">
+                            <option value="">Seleziona Casa Editrice</option>
+                            <!-- Aggiungi qui le opzioni dinamicamente -->
+                            {% for editore in editori %}
+                                <option value="{{ editore[0] }}">{{ editore[0] }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="categoria">Categoria:</label>
+                        <select name="categoria" id="categoria">
+                            <option value="">Seleziona Categoria</option>
+                            <!-- Aggiungi qui le opzioni dinamicamente -->
+                            {% for categoria in categorie %}
+                                <option value="{{ categoria.nome_categoria }}">{{ categoria.nome_categoria }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <!-- Filtro prezzo con un solo slider per selezionare l'intervallo -->
+                    <div class="filter-group">
+                        <label for="priceSlider">Prezzo:</label>
+                        <div id="priceSlider" style="margin: 20px 0;"></div>
+                    </div>
+                    <div class="price-values">
+                        Prezzo Minimo: <span id="prezzoMin">0</span>€
+                        Prezzo Massimo: <span id="prezzoMax">500</span>€
+                    </div>
+                    <!-- Input nascosti per il prezzo minimo e massimo -->
+                    <input type="hidden" name="prezzo_min" id="prezzo_min" value="0">
+                    <input type="hidden" name="prezzo_max" id="prezzo_max" value="500">
+
+                    <br><button type="submit" class="filter-button">Applica Filtri</button>
+                </form>
+            </div>
+            <script>
+                function toggleFilters() {
+                    var filters = document.getElementById("filters");
+                    if (filters.style.display === "none") {
+                        filters.style.display = "block";
+                    } else {
+                        filters.style.display = "none";
+                    }
+                }
+                var slider = document.getElementById('priceSlider');
+                var prezzoMinInput = document.getElementById('prezzo_min');
+                var prezzoMaxInput = document.getElementById('prezzo_max');
+
+                noUiSlider.create(slider, {
+                    start: [0, 500], // Valori iniziali: minimo 0, massimo 1000
+                    connect: true,
+                    range: {
+                        'min': 0,
+                        'max': 500
+                    },
+                    step: 0.01,
+                    tooltips: true, // Visualizza i valori accanto alle maniglie
+                    format: {
+                        to: function (value) {
+                            return value.toFixed(2); // Mostra i valori con due decimali
+                        },
+                        from: function (value) {
+                            return Number(value);
+                        }
+                    }
+                });
+
+                // Aggiorna i valori visualizzati
+                var prezzoMinSpan = document.getElementById('prezzoMin');
+                var prezzoMaxSpan = document.getElementById('prezzoMax');
+
+                slider.noUiSlider.on('update', function (values, handle) {
+                    prezzoMinSpan.innerHTML = values[0];
+                    prezzoMaxSpan.innerHTML = values[1];
+                    prezzoMinInput.value = values[0];
+                    prezzoMaxInput.value = values[1];
+                });
+            </script>
+            <!-- LIBRI CON RECENSIONI PIù ALTE-->
+            <br><br>
+            <section id="top-rated-books" class="top-rated-books">
+                    <h2>Libri con recensioni migliori</h2><br>
+                    <ul>
+                        {% for book2 in top_recensioni %}
+                            <li>
+                                <div class="book-item">
+                                    <h3>{{ book2.titolo }}</h3>
+                                    <div class="stars">
+                                        {% for i in range(1, 6) %}
+                                            <i class="fa fa-star {% if i > (book2.media_valutazione | round(0, 'ceil')) %}inactive{% endif %}"></i>
+                                        {% endfor %}
+                                    </div>
+                                    <p>Venduto da {{ book2.nome_venditore }} {{ book2.cognome_venditore }}</p>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </section>
+
+                <!-- LIBRI CON PIù RECENSIONI -->
+                <section id="top-rated-books" class="top-rated-books">
+                    <h2>Libri con più recensioni</h2><br>
+                    <ul>
+                        {% for book, total_reviews in top_books %}
+                            <li>
+                                <div class="book-item">
+                                    <h3>{{ book.titolo }}</h3>
+                                    <p>Numero di recensioni: {{ total_reviews }}</p>
+                                    <p>Descrizione: {{ book.descrizione }}</p>
+                                </div>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                </section>
+
+        </div>
+    </main>
+    <footer>
+        &copy; 2024 BookNook - Tutti i diritti riservati
+    </footer>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!doctype html>
+<html lang="it">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>BookNook</title>
+</head>
+
+<style>
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: #f4f4f9;
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    color: #333;
+  }
+
+  .menu {
+    background-color: #FFFFFF; /* colore barra menù */
+    position: fixed;
+    width: 100%;
+    padding: 15px 0;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    color: #025159; /* colore scritte mennu */
+    display: flex;
+    justify-content: center;
+    z-index: 1000;
+  }
+
+  .menu a {
+    text-decoration: none;
+    color: #025159;
+    margin: 0 15px;
+    font-weight: bold;
+    transition: color 0.3s;
+  }
+
+  .menu a:hover {
+    color: #113949; /* colore hover scritte menu */
+  }
+
+  .start {
+    background: linear-gradient(336deg, rgba(231, 90, 12, .8), rgba(231, 90, 12, 0) 70.71%),
+                linear-gradient(127deg, rgba(102, 194, 207, .8), rgba(102, 194, 207, 0) 70.71%),
+                linear-gradient(217deg, rgba(17, 57, 73, .8), rgba(17, 57, 73, 0) 70.71%);
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    color: #FFF;
+    padding: 20px;
+    text-align: center;
+  }
+
+  .logo {
+    margin-bottom: 20px;
+    width: 300px;
+    height: 300px;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+
+  .input-field {
+    border: none;
+    border-radius: 25px;
+    padding: 15px;
+    margin: 10px 0;
+    width: 250px;
+    color: #333;
+    background-color: #ecf0f1;
+    text-align: center;
+    font-size: 1em;
+  }
+
+  .input-field::placeholder {
+    color: #7f8c8d;
+  }
+
+  .submit-button {
+    border: none;
+    border-radius: 20px;
+    padding: 10px 25px;
+    margin: 10px 0;
+    color: #fff;
+    background-color: #e75a0c;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+    .submit-button-login {
+    border: none;
+    border-radius: 20px;
+    padding: 10px 25px;
+    margin: 10px 0;
+    color: #fff;
+    background-color: #1B5C75;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+
+
+  .submit-button:hover {
+    background-color: #E7360C;
+  }
+
+    .submit-button-login:hover {
+    background-color: #113949;
+  }
+
+  .section {
+    padding: 40px 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .section h1 {
+    font-size: 2.5em;
+    margin-bottom: 20px;
+  }
+
+  .section p {
+    max-width: 800px;
+    font-size: 1.2em;
+    line-height: 1.6;
+  }
+
+  .primo, .secondo, .terzo {
+    min-height: 70vh;
+    background: linear-gradient(to right, #66c2cf, #f5eede, #66c2cf);
+    /background: linear-gradient(135deg, #025159, #80BFBF, #025159);/
+    color: #113949;
+  }
+
+  .terzo p {
+    font-size: 1.2em;
+    margin: 10px 0;
+  }
+
+  @media (max-width: 768px) {
+    .start h1 {
+      font-size: 2.5em;
+    }
+
+    .input-field, .submit-button {
+      width: 80%;
+    }
+
+    .section h1 {
+      font-size: 2em;
+    }
+
+    .section p {
+      font-size: 1em;
+    }
+  }
+
+</style>
+
+<body>
+    <div class="menu">
+        <a href="#primo">Chi siamo</a>
+        <a href="#secondo">Come funziona</a>
+        <a href="#terzo">Contatti</a>
+    </div>
+
+    <div id="start" class="start">
+        <img src="../static/img/logo2.jpg" alt="BookEd Logo" class="logo">
+        <form action="/login" method="post">
+            <input type="text" id="email" name="email" class="input-field" placeholder="email.."><br>
+            <input type="password" id="password" name="password" class="input-field" placeholder="password.."><br>
+            <input class="submit-button-login" type="submit" value="Login" ><br>
+        </form>
+        <a class="submit-button" href="/register" style="text-decoration: none">Registrati</a>
+    </div>
+
+    <div id="primo" class="section primo" style="text-align: center; padding: 100px;">
+    <h1 style="margin-bottom: 20px;">Chi siamo</h1>
+        <p style="font-style: italic; line-height: 1.6; max-width: 600px; margin: 0 auto;">
+            Siamo tre studentesse appassionate di tecnologia e sviluppo web, unite dalla nostra passione per creare
+            soluzioni digitali innovative. Il nostro progetto nasce con l’idea di semplificare la compravendita di libri
+            online, offrendo una piattaforma sicura e intuitiva sia per chi vende che per chi acquista. Ognuna di noi porta
+            competenze diverse al progetto, dal design alla programmazione, per garantirvi la migliore esperienza utente
+            possibile.
+        </p>
+       <br><a class="submit-button" href="#start" style="text-decoration: none">Torna al login</a>
+    </div>
+
+    <div id="secondo" class="section secondo" style="text-align: center; padding: 100px;">
+        <h2 style="margin-top: 40px;">Come funziona</h2>
+            <p style="font-style: italic; line-height: 1.5; max-width: 550px; margin: 0 auto;">
+                La nostra piattaforma è pensata per rendere l'acquisto e la vendita di libri semplice e accessibile a tutti.
+                <br>
+                Prima di iniziare, è necessario registrarsi.
+                <br>
+                Se ti registri come <strong>Acquirente</strong>, potrai esplorare il nostro catalogo di libri, aggiungere i tuoi preferiti al carrello
+                e finalizzare l'acquisto in pochi semplici passaggi.
+                <br>
+                Se invece ti registri come <strong>Venditore</strong>, avrai la possibilità non solo di acquistare, ma anche di mettere in vendita i tuoi libri,
+                gestendo i tuoi annunci in modo facile e veloce.
+                <br>
+                Il tutto in un ambiente sicuro e affidabile, progettato per offrire una navigazione fluida e un'esperienza d'acquisto piacevole.
+            </p>
+        <br><a class="submit-button" href="#start" style="text-decoration: none">Torna al login</a>
+    </div>
+
+
+    <div id="terzo" class="section terzo" style="text-align: center; padding: 150px;">
+        <h1 style="margin-bottom: 20px; font-family: Arial, sans-serif; font-weight: bold;">Contatti</h1>
+            <p style="font-family: Arial, sans-serif; font-weight: bold; font-size: 18px;">Email: booknook_ecommerce@gmail.com</p>
+            <p style="font-family: Arial, sans-serif; font-weight: bold; font-size: 18px;">Telefono: +39 123 4567890</p>
+
+        <a class="submit-button" href="#start" style="text-decoration: none">Torna al login</a>
+    </div>
+
+</body>
+</html>

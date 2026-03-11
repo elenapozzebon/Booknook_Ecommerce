@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendite</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+</head>
+
+<style>
+    body {
+        font-family: 'Roboto', sans-serif;
+        margin: 0;
+        color: #333;
+        padding: 0;
+        background: linear-gradient(336deg, rgba(231, 90, 12, .8), rgba(231, 90, 12, 0) 70.71%),
+                    linear-gradient(127deg, rgba(102, 194, 207, .8), rgba(102, 194, 207, 0) 70.71%),
+                    linear-gradient(217deg, rgba(17, 57, 73, .8), rgba(17, 57, 73, 0) 70.71%);
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh;
+    }
+
+        header {
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 10px 20px;
+        height: 200px;
+        position: relative;
+    }
+
+    .header-left {
+        display: flex;
+        align-items: center;
+        position: absolute;
+        justify-content: center;
+    }
+
+    .header-left img {
+        width: 150px;
+        height: 150px;
+        margin-right: 10px;
+        border-radius: 50%;
+        overflow: hidden;
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .header-left img:hover {
+        transform: scale(1.1); /* Effetto zoom */
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Effetto ombra */
+    }
+
+    main {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        padding: 20px;
+    }
+
+    .content {
+        background-color: #FFFFFF;
+        padding: 30px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        width: 100%;
+        max-width: 1200px;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 20px;
+        color: #1B5C75;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    table th, table td {
+        padding: 12px;
+        border: 1px solid #ddd;
+        text-align: left;
+        transition: background-color 0.3s;
+    }
+
+    table th {
+        background-color: #f4f4f4;
+        font-weight: bold;
+    }
+
+    table tr:hover {
+        background-color: #f1f1f1;
+    }
+
+    button {
+        padding: 10px 15px;
+        margin: 5px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+
+    .edit-button {
+        background-color: #007bff;
+        color: white;
+    }
+
+    .edit-button:hover {
+        background-color: #0056b3;
+        transform: translateY(-2px);
+    }
+
+    .save-button {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .save-button:hover {
+        background-color: #218838;
+        transform: translateY(-2px);
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    .status-dropdown {
+        padding: 5px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        transition: border-color 0.3s;
+    }
+
+    .status-dropdown:focus {
+        border-color: #007bff;
+        outline: none;
+    }
+
+    /* Gestione degli errori */
+    ul {
+        list-style-type: none;
+        padding: 0;
+        margin: 20px 0;
+    }
+
+    li {
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        color: black;
+    }
+
+    li.success {
+        background-color: #4caf50;
+    }
+
+    li.error {
+        background-color: #f44336;
+    }
+
+    li.warning {
+        background-color: #ff9800;
+    }
+
+    li.info {
+        background-color: #2196f3;
+    }
+
+    li {
+        transition: opacity 0.5s ease-in-out;
+    }
+
+    footer {
+        background: none;
+        color: #264466;
+        text-align: center;
+        padding: 20px;
+    }
+</style>
+
+<body>
+    <header>
+        <div class="header-left">
+            <a href="{{ url_for('solo_venditore') }}">
+                <img src="./static/img/logo2.jpg" alt="BookNook Logo">
+            </a>
+        </div>
+    </header>
+    <main>
+        <div class="content">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <ul>
+                        {% for category, message in messages %}
+                            <li class="{{ category }}">{{ message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endwith %}
+            <h1>Vendite Recenti</h1>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Ordine</th>
+                        <th>Libro</th>
+                        <th>Quantità</th>
+                        <th>Data</th>
+                        <th>Cliente</th>
+                        <th>Stato Ordine</th>
+                        <th>Azioni</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for vendita in vendite %}
+                        <tr>
+                            <td>{{ vendita.id_ordine }}</td>
+                            <td>{{ vendita.titolo }}</td>
+                            <td>{{ vendita.quantita }}</td>
+                            <td>{{ vendita.data }}</td>
+                            <td>{{ vendita.nome }} {{ vendita.cognome }}</td>
+                            <td>
+                                <span class="status-text">{{ vendita.stato }}</span>
+                                <form method="POST" action="{{ url_for('update_order_status') }}">
+                                    <input type="hidden" name="id_ordine" value="{{ vendita.id_ordine }}">
+                                    <input type="hidden" name="id_libro" value="{{ vendita.id_libro }}">
+                                    <select class="status-dropdown hidden" name="stato">
+                                        <option value="Spedito" {% if vendita.stato == "Spedito" %}selected{% endif %}>Spedito</option>
+                                        <option value="Consegnato" {% if vendita.stato == "Consegnato" %}selected{% endif %}>Consegnato</option>
+                                    </select>
+                                </form>
+                            </td>
+                            <td>
+                                {% if vendita.stato != 'Consegnato' %}
+                                    <button class="edit-button" onclick="enableEdit(this)">Modifica</button>
+                                    <button class="save-button hidden" onclick="saveChanges(this)">Salva</button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <script>
+        // Funzione per abilitare la modifica dello stato ordine
+        function enableEdit(button) {
+            const row = button.closest('tr');
+            const statusText = row.querySelector('.status-text');
+            const dropdown = row.querySelector('.status-dropdown');
+            const saveButton = row.querySelector('.save-button');
+
+            // Nascondi il testo dello stato e mostra il menu a tendina
+            statusText.classList.add('hidden');
+            dropdown.classList.remove('hidden');
+
+            // Nascondi il pulsante di modifica e mostra il pulsante di salvataggio
+            button.classList.add('hidden');
+            saveButton.classList.remove('hidden');
+        }
+
+        function saveChanges(button) {
+            const row = button.closest('tr');
+            const dropdown = row.querySelector('.status-dropdown');
+
+            // Invia il form associato
+            dropdown.form.submit();
+        }
+    </script>
+    <footer>
+        &copy; 2024 BookNook - Tutti i diritti riservati
+    </footer>
+</body>
+</html>

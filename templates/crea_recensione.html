@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inserisci Recensione</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            color: #333;
+            background: linear-gradient(336deg, rgba(231, 90, 12, .8), rgba(231, 90, 12, 0) 70.71%),
+                        linear-gradient(127deg, rgba(102, 194, 207, .8), rgba(102, 194, 207, 0) 70.71%),
+                        linear-gradient(217deg, rgba(17, 57, 73, .8), rgba(17, 57, 73, 0) 70.71%);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 20px; /* Spazio sopra per il logo */
+        }
+
+        header {
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 20px;
+            height: 200px;
+            position: relative;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            justify-content: center;
+        }
+
+        .header-left img {
+            width: 150px;
+            height: 150px;
+            margin-right: 10px;
+            border-radius: 50%;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .header-left img:hover {
+            transform: scale(1.1); /* Effetto zoom */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Effetto ombra */
+        }
+
+        h1 {
+            color: #1B5C75;
+            margin-bottom: 10px;
+            text-align: center;
+            font-size: 1.8em;
+        }
+
+        main {
+            background-color: #ffffff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 700px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #555;
+        }
+
+        .rating-container {
+            display: flex;
+            align-items: center;
+        }
+
+        .fa-star {
+            color: gold; /* Colore della stellina */
+            margin-right: 5px; /* Spazio tra la stellina e l'input */
+            font-size: 24px;
+        }
+
+        input[type="number"], textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            box-shadow: inset 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        button {
+            background-color: #1B5C75;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+            width: 100%;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover {
+            background-color: #14576c;
+        }
+
+        footer {
+            background: none;
+            color: #264466;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-left">
+            <a href="{% if cosa_sono %}{{ url_for('solo_venditore') }}{% else %}{{ url_for('solo_compratore') }}{% endif %}">
+                <img src="{{ url_for('static', filename='img/logo2.jpg') }}" alt="BookNook Logo">
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <h1>Recensisci il libro "{{ libro.titolo }}"</h1>
+        <form method="POST">
+            <label for="valutazione"><i class="fas fa-star"></i>Valutazione (1-5) <i class="fas fa-star"></i></label>
+            <div class="rating-container">
+                <input type="number" id="valutazione" name="valutazione" min="1" max="5" required>
+            </div>
+
+            <label for="descrizione">Descrizione:</label>
+            <textarea id="descrizione" name="descrizione" rows="4" required></textarea>
+
+            <button type="submit">Invia Recensione</button>
+        </form>
+    </main>
+    <footer>
+        &copy; 2024 BookNook - Tutti i diritti riservati
+    </footer>
+</body>
+</html>

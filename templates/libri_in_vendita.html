@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Libri in Vendita</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            color: #333;
+            padding: 0;
+            background: linear-gradient(336deg, rgba(231, 90, 12, .8), rgba(231, 90, 12, 0) 70.71%),
+                        linear-gradient(127deg, rgba(102, 194, 207, .8), rgba(102, 194, 207, 0) 70.71%),
+                        linear-gradient(217deg, rgba(17, 57, 73, .8), rgba(17, 57, 73, 0) 70.71%);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        header {
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px 20px;
+            height: 200px;
+            position: relative;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            position: absolute;
+            justify-content: center;
+        }
+
+        .header-left img {
+            width: 150px;
+            height: 150px;
+            margin-right: 10px;
+            border-radius: 50%;
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .header-left img:hover {
+            transform: scale(1.1); /* Effetto zoom */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Effetto ombra */
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .btn-primary {
+            background-color: #1B5C75;;
+            color: white;
+            text-decoration: none;
+
+        }
+
+        .btn-primary:hover {
+            background-color: #113949;
+            transform: translateY(-2px);
+            text-decoration: none;
+        }
+
+        main {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px;
+        }
+
+        .libri-in-vendita {
+            background-color: #FFFFFF;
+            padding: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #1B5C75;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table th, table td {
+            padding: 12px;
+            border: 1px solid #ddd;
+            text-align: left;
+            transition: background-color 0.3s;
+        }
+
+        table th {
+            background-color: #f4f4f4;
+            font-weight: bold;
+        }
+
+        table tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        button {
+            padding: 10px 15px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+            transform: translateY(-2px);
+        }
+
+        footer {
+            background: none;
+            color: #264466;
+            text-align: center;
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <a href="{{ url_for('solo_venditore') }}">
+                <img src="./static/img/logo2.jpg" alt="BookNook Logo">
+            </a>
+        </div>
+    </header>
+
+    <main>
+        <section class="libri-in-vendita">
+            <nav>
+                <ul>
+                    <li style="list-style: none;"><a href="{{ url_for('add_book') }}" class="btn btn-primary">Aggiungi Nuovo Libro</a></li>
+                </ul>
+            </nav>
+            <h2>Libri Disponibili per la Vendita</h2>
+            {% if libri_in_vendita and libri_in_vendita|length > 0 %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Libro</th>
+                            <th>Quantità</th>
+                            <th>Prezzo</th>
+                            <th>Autore</th>
+                            <th>Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for libro in libri_in_vendita %}
+                            <tr>
+                                <td>{{ libro.Libri.titolo }}</td>
+                                <td>{{ libro.Venditore_Libro.quantita }}</td>
+                                <td>{{ libro.Venditore_Libro.prezzo }}</td>
+                                <td>{{ libro.nome_autore }} {{ libro.cognome_autore }}</td>
+                                <td>
+                                    <form method="POST" action="{{ url_for('elimina_libro') }}">
+                                        <input type="hidden" name="id_libro" value="{{ libro.Libri.id_libro }}">
+                                        <button type="submit" class="btn btn-danger">Elimina</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                <p>Ancora nessun libro in vendita.</p>
+            {% endif %}
+        </section>
+    </main>
+    <footer>
+        &copy; 2024 BookNook - Tutti i diritti riservati
+    </footer>
+</body>
+</html>
