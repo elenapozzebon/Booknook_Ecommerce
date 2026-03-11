@@ -1,80 +1,85 @@
-# BookNook - E-commerce di Libri
+# BookNook - Book E-commerce
 
-Progetto universitario per il corso di Basi di Dati (Anno Accademico 2023-2024). 
-BookNook è una piattaforma web dedicata agli appassionati di libri, progettata per permettere agli utenti di acquistare e vendere testi in modo semplice e sicuro. L'applicazione utilizza Flask per il back-end e PostgreSQL per il database.
+University project for the Databases course (Academic Year 2023-2024). 
+
+BookNook is a web platform dedicated to book lovers, designed to allow users to buy and sell books easily and securely. The application uses Flask for the back-end and PostgreSQL for the database.
 
 ---
 
 ## Struttura del Progetto
 
-Il progetto è organizzato con la seguente struttura di file e cartelle:
+The project is organized with the following file and folder structure:
 
-* **`app.py`**: Il file principale del back-end contenente le rotte Flask, i modelli SQLAlchemy e la logica applicativa.
-* **`templates/`**: Cartella contenente tutti i file HTML per l'interfaccia utente (es. login, carrello, profilo).
-* **`static/img/`**: Cartella dedicata alle risorse statiche, come il logo e le immagini utilizzate nel sito web.
-* **`db/schema_booknook_db.sql`**: File di backup contenente lo schema strutturale del database PostgreSQL (tabelle, viste, trigger e ruoli), privo di dati personali per motivi di privacy.
-
----
-
-## Funzionalità Principali
-
-L'applicazione distingue due tipologie di utenti tramite un campo booleano nel database, offrendo funzionalità mirate:
-
-**Area Compratori**
-* **Ricerca e Filtri:** Barra di ricerca avanzata per trovare libri tramite titolo, casa editrice, categoria e prezzo. I risultati escludono automaticamente i libri venduti dall'utente stesso.
-* **Gestione Carrello:** Aggiunta di prodotti al carrello con controllo dinamico in tempo reale della quantità effettivamente rimanente in magazzino.
-* **Ordini e Notifiche:** Completamento dell'acquisto e ricezione di notifiche automatiche ogni volta che il venditore aggiorna lo stato dell'ordine (es. "In Preparazione", "Spedito").
-* **Recensioni:** Sistema di feedback per valutare i libri acquistati, con calcolo automatico della media delle valutazioni.
-
-**Area Venditori**
-* **Gestione Catalogo:** Inserimento di nuovi libri o aggiunta di copie a titoli esistenti (con funzione di auto-completamento tramite JavaScript) specificando quantità, prezzo e usura.
-* **Rimozione Prodotti:** Eliminazione logica di un libro dalla vetrina impostando semplicemente la sua quantità a zero.
-* **Dashboard Vendite:** Schermata dedicata per visualizzare gli ordini ricevuti dai compratori e aggiornarne lo stato di spedizione.
-
-**Dietro le quinte (Database e Sicurezza)**
-* **Sicurezza Password:** Tutte le password sono crittografate tramite algoritmo SHA-256 prima del salvataggio.
-* **Gestione Ruoli PostgreSQL:** La registrazione crea fisicamente un utente nel database PostgreSQL, assegnandogli i permessi formali (`GRANT`) appropriati al suo ruolo.
-* **Trigger di Integrità:** Un *Before Trigger* impedisce l'aggiunta al carrello di quantità non disponibili, mentre un *After Trigger* gestisce l'attivazione automatica delle notifiche per gli ordini.
-* **Viste Ottimizzate:** Utilizzo di una View SQL per pre-calcolare e aggregare le medie delle recensioni dei libri.
+* **`app.py`**: The main back-end file containing Flask routes, SQLAlchemy models, and application logic.
+* **`templates/`**: Folder containing all HTML files for the user interface (e.g., login, cart, profile).
+* **`static/img/`**: Folder dedicated to static resources, such as the logo and images used on the website.
+* **`db/schema_booknook_db.sql`**: Backup file containing the structural schema of the PostgreSQL database (tables, views, triggers, and roles), stripped of personal data for privacy reasons.
 
 ---
 
-## Come Usare il Progetto (Installazione ed Esecuzione da Terminale)
+## Main Features
 
-Segui questi passaggi per avviare l'applicazione in locale sul tuo computer utilizzando la riga di comando.
+The application distinguishes between two types of users via a boolean field in the database, offering targeted features:
 
-### 1. Configurazione del Database (Schema Vuoto)
-Essendo una repository pubblica, il database fornito contiene solo la struttura logica e non i dati sensibili. Assicurati di avere **PostgreSQL** installato e configurato nelle variabili di ambiente del tuo sistema.
+**Buyers Area**
 
-1. Apri il terminale e crea un nuovo database vuoto chiamato `"progetto_basi"` eseguendo questo comando:
+* **Search and Filters**: Advanced search bar to find books by title, publisher, category, and price. Results automatically exclude books sold by the user themselves.
+* **Cart Management**: Addition of products to the cart with dynamic, real-time checking of the actual quantity remaining in stock.
+* **Orders and Notifications**: Purchase completion and receipt of automatic notifications whenever the seller updates the order status (e.g., "In Preparation", "Shipped").
+* **Reviews**: Feedback system to rate purchased books, with automatic calculation of the average rating.
+
+**Sellers Area**
+
+* **Catalog Management**: Insertion of new books or addition of copies to existing titles (with auto-completion feature via JavaScript) specifying quantity, price, and condition.
+* **Product Removal**: Logical deletion of a book from the storefront simply by setting its quantity to zero.
+* **Sales Dashboard**: Dedicated screen to view orders received from buyers and update their shipping status.
+
+**Behind the Scenes (Database and Security)**
+
+* **Password Security**: All passwords are encrypted using the SHA-256 algorithm before saving.
+* **PostgreSQL Role Management**: Registration physically creates a user in the PostgreSQL database, assigning them the formal permissions (`GRANT`) appropriate for their role.
+* **Integrity Triggers**: A *Before Trigger* prevents adding unavailable quantities to the cart, while an *After Trigger* manages the automatic activation of order notifications.
+* **Optimized Views**: Use of an SQL View to pre-calculate and aggregate average book reviews.
+
+---
+
+## How to Use the Project (Installation and Execution from Terminal)
+
+Follow these steps to run the application locally on your computer using the command line.
+
+### 1. Database Setup (Empty Schema)
+Being a public repository, the provided database contains only the logical structure and no sensitive data. Make sure you have **PostgreSQL** installed and configured in your system's environment variables.
+
+1. Open the terminal and create a new empty database named `progetto_basi` by running this command:
    ```bash
-   createdb -U postgres progettoBasi
+   createdb -U postgres progetto_basi
    ```
-2. Ripristina lo schema strutturale importando il file SQL fornito nella repository:
+2. Restore the structural schema by importing the SQL file provided in the repository:
    ```bash
-    psql -U postgres -d progettoBasi -f schema_booknook_db.sql
+    psql -U postgres -d progetto_basi -f schema_booknook_db.sql
    ```
-3. Nota: Avviando l'app, il database sarà inizialmente vuoto. Registrati come nuovo utente dall'interfaccia web per iniziare a popolarlo!
+   
+Note: Upon starting the app, the database will initially be empty. Register as a new user from the web interface to start populating it!
 
-### 2. Configurazione dell'Ambiente Python
+### 2. Python Environment Setup
 
-1. Assicurati di avere Python installato sul sistema.
-2. Apri il terminale nella cartella principale del progetto (dove si trova il file app.py).
-3. Installa tutte le dipendenze necessarie eseguendo:
+1. Make sure you have Python installed on your system.
+2. Open the terminal in the main project folder (where the `app.py` file is located).
+3. Install all necessary dependencies by running:
    ```bash
     pip install Flask Flask-SQLAlchemy Flask-Login Flask-Migrate psycopg2 sqlalchemy
    ```
-(Consiglio: è buona pratica creare prima un ambiente virtuale con ```python -m venv venv``` e attivarlo, per poi eseguire il ```pip install```).
+(Tip: it's good practice to first create a virtual environment with ```python -m venv venv``` and activate it, then run the ```pip install``` command).
 
-### 3. Connessione e Avvio
+### 3. Connection and Startup
 
-1. Apri il file app.py con il tuo editor di testo preferito (es. VS Code, PyCharm o Blocco Note).
-2. Alla riga 14, verifica che la stringa di connessione URI corrisponda alla password del tuo server PostgreSQL locale:
+1. Open the `app.py` file with your favorite text editor (e.g., VS Code, PyCharm, or Notepad).
+2. On line 14, verify that the URI connection string matches the password of your local PostgreSQL server:
    ```Python
    app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:latuapassword@localhost/progettoBasi'
    ```
-3. Torna sul terminale e avvia il server eseguendo:
+3. Go back to the terminal and start the server by running:
    ```bash
    python app.py
    ```
-4. Apri il browser e collegati all'indirizzo ```http://127.0.0.1:5000```.
+4. Open your browser and connect to the address ```http://127.0.0.1:5000```.
