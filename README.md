@@ -12,7 +12,7 @@ Il progetto è organizzato con la seguente struttura di file e cartelle:
 * **`app.py`**: Il file principale del back-end contenente le rotte Flask, i modelli SQLAlchemy e la logica applicativa.
 * **`templates/`**: Cartella contenente tutti i file HTML per l'interfaccia utente (es. login, carrello, profilo).
 * **`static/img/`**: Cartella dedicata alle risorse statiche, come il logo e le immagini utilizzate nel sito web.
-* **`schema_booknook_db.sql`**: File di backup contenente lo schema strutturale del database PostgreSQL (tabelle, viste, trigger e ruoli), privo di dati personali per motivi di privacy.
+* **`db/schema_booknook_db.sql`**: File di backup contenente lo schema strutturale del database PostgreSQL (tabelle, viste, trigger e ruoli), privo di dati personali per motivi di privacy.
 
 ---
 
