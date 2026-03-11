@@ -1,80 +1,80 @@
-# Progetto-Basi-di-Dati
-Progetto di basi di dati 2024, secondo anno università. E-commerce di libri.
+# BookNook - E-commerce di Libri
 
-## 1. Pianificazione
-Crea una directory per il progetto con sottocartelle per il front-end, back-end, database, e documentazione.
+Progetto universitario per il corso di Basi di Dati (Anno Accademico 2023-2024). 
+BookNook è una piattaforma web dedicata agli appassionati di libri, progettata per permettere agli utenti di acquistare e vendere testi in modo semplice e sicuro. L'applicazione utilizza Flask per il back-end e PostgreSQL per il database.
 
-## 2. Progettazione del Database
-Schema concettuale e logico:
-Disegna un diagramma E-R (Entity-Relationship) per il database.
-Identifica le entità principali (Utenti, Libri, Ordini, Carrello, Recensioni).
-Definisci le relazioni tra le entità (es. un utente può avere più ordini, un libro può avere più recensioni).
+---
 
-Definizione delle tabelle:
-Crea tabelle per ogni entità con i relativi attributi.
-Definisci chiavi primarie e straniere, vincoli di integrità, e indici.
+## Struttura del Progetto
 
-## 3. Creazione del Database
-Scripting SQL:
-Scrivi script SQL per creare le tabelle e popolare il database con dati di esempio.
-Utilizzo di SQLAlchemy:
-Configura SQLAlchemy per interfacciarsi con il DBMS scelto.
-Definisci i modelli Python per le tabelle del database.
+Il progetto è organizzato con la seguente struttura di file e cartelle:
 
-## 4. Implementazione del Back-End
-Configurazione Flask:
-Installa Flask e Flask-SQLAlchemy.
-Configura l'app Flask e collega il database.
-Gestione degli utenti:
+* **`app.py`**: Il file principale del back-end contenente le rotte Flask, i modelli SQLAlchemy e la logica applicativa.
+* **`templates/`**: Cartella contenente tutti i file HTML per l'interfaccia utente (es. login, carrello, profilo).
+* **`static/img/`**: Cartella dedicata alle risorse statiche, come il logo e le immagini utilizzate nel sito web.
+* **`schema_booknook_db.sql`**: File di backup contenente lo schema strutturale del database PostgreSQL (tabelle, viste, trigger e ruoli), privo di dati personali per motivi di privacy.
 
-Implementa l'autenticazione e l'autorizzazione (es. Flask-Login).
-Crea modelli e viste per la registrazione, login, e gestione del profilo.
-Gestione dei prodotti (Libri):
+---
 
-Crea modelli per i libri con attributi come titolo, autore, descrizione, prezzo, disponibilità.
-Implementa CRUD (Create, Read, Update, Delete) per i libri.
-Carrello della spesa e gestione degli ordini:
+## Funzionalità Principali
 
-Implementa la funzionalità del carrello della spesa.
-Crea modelli per gli ordini e gestisci lo stato degli ordini.
+L'applicazione distingue due tipologie di utenti tramite un campo booleano nel database, offrendo funzionalità mirate:
 
-## 5. Implementazione del Front-End
-Struttura delle pagine:
-Crea le pagine principali: home, catalogo libri, dettaglio libro, carrello, profilo utente, ecc.
-Utilizzo di Bootstrap o altro framework CSS:
+**Area Compratori**
+* **Ricerca e Filtri:** Barra di ricerca avanzata per trovare libri tramite titolo, casa editrice, categoria e prezzo. I risultati escludono automaticamente i libri venduti dall'utente stesso.
+* **Gestione Carrello:** Aggiunta di prodotti al carrello con controllo dinamico in tempo reale della quantità effettivamente rimanente in magazzino.
+* **Ordini e Notifiche:** Completamento dell'acquisto e ricezione di notifiche automatiche ogni volta che il venditore aggiorna lo stato dell'ordine (es. "In Preparazione", "Spedito").
+* **Recensioni:** Sistema di feedback per valutare i libri acquistati, con calcolo automatico della media delle valutazioni.
 
-Utilizza Bootstrap per stilizzare le pagine.
-Implementa funzionalità di ricerca e filtri.
-JavaScript (opzionale):
+**Area Venditori**
+* **Gestione Catalogo:** Inserimento di nuovi libri o aggiunta di copie a titoli esistenti (con funzione di auto-completamento tramite JavaScript) specificando quantità, prezzo e usura.
+* **Rimozione Prodotti:** Eliminazione logica di un libro dalla vetrina impostando semplicemente la sua quantità a zero.
+* **Dashboard Vendite:** Schermata dedicata per visualizzare gli ordini ricevuti dai compratori e aggiornarne lo stato di spedizione.
 
-Migliora l'esperienza utente con JavaScript (es. aggiornamento dinamico del carrello).
+**Dietro le quinte (Database e Sicurezza)**
+* **Sicurezza Password:** Tutte le password sono crittografate tramite algoritmo SHA-256 prima del salvataggio.
+* **Gestione Ruoli PostgreSQL:** La registrazione crea fisicamente un utente nel database PostgreSQL, assegnandogli i permessi formali (`GRANT`) appropriati al suo ruolo.
+* **Trigger di Integrità:** Un *Before Trigger* impedisce l'aggiunta al carrello di quantità non disponibili, mentre un *After Trigger* gestisce l'attivazione automatica delle notifiche per gli ordini.
+* **Viste Ottimizzate:** Utilizzo di una View SQL per pre-calcolare e aggregare le medie delle recensioni dei libri.
 
-## 6. Miglioramenti e Ottimizzazioni
-Integrità dei dati:
-Definisci trigger e transazioni per garantire l'integrità dei dati.
-Sicurezza:
-Implementa misure di sicurezza (protezione contro XSS, SQL injection).
-Performance:
-Ottimizza il database con indici.
-Astrazione dal DBMS:
-Usa ORM di SQLAlchemy per mantenere l'astrazione dal DBMS.
+---
 
-## 7. Documentazione
-Relazione PDF:
-Descrivi le funzionalità principali, la progettazione del database, le query principali, e le scelte progettuali.
-Documenta le scelte tecnologiche e il contributo dei membri del gruppo.
-Commenti nel codice:
-Assicurati che il codice sia ben commentato per facilitare la manutenzione.
+## Come Usare il Progetto (Installazione ed Esecuzione da Terminale)
 
-## 8. Consegna
-Preparazione del file ZIP:
-Includi il codice sorgente, le risorse, la documentazione, e il video di demo.
-Video demo:
-Registra un video di circa 10 minuti che mostri l'applicazione funzionante.
+Segui questi passaggi per avviare l'applicazione in locale sul tuo computer utilizzando la riga di comando.
 
-## Esempio di Timeline
-1 - Pianificazione e progettazione del database.
-2 - Implementazione del back-end e gestione degli utenti.
-3 - Implementazione del front-end e gestione dei prodotti.
-4 - Miglioramenti, ottimizzazioni e documentazione.
-5 - Preparazione del file ZIP e registrazione del video demo.
+### 1. Configurazione del Database (Schema Vuoto)
+Essendo una repository pubblica, il database fornito contiene solo la struttura logica e non i dati sensibili. Assicurati di avere **PostgreSQL** installato e configurato nelle variabili di ambiente del tuo sistema.
+
+1. Apri il terminale e crea un nuovo database vuoto chiamato `"progetto_basi"` eseguendo questo comando:
+   ```bash
+   createdb -U postgres progettoBasi
+   ```
+2. Ripristina lo schema strutturale importando il file SQL fornito nella repository:
+   ```bash
+    psql -U postgres -d progettoBasi -f schema_booknook_db.sql
+   ```
+3. Nota: Avviando l'app, il database sarà inizialmente vuoto. Registrati come nuovo utente dall'interfaccia web per iniziare a popolarlo!
+
+### 2. Configurazione dell'Ambiente Python
+
+1. Assicurati di avere Python installato sul sistema.
+2. Apri il terminale nella cartella principale del progetto (dove si trova il file app.py).
+3. Installa tutte le dipendenze necessarie eseguendo:
+   ```bash
+    pip install Flask Flask-SQLAlchemy Flask-Login Flask-Migrate psycopg2 sqlalchemy
+   ```
+(Consiglio: è buona pratica creare prima un ambiente virtuale con ```python -m venv venv``` e attivarlo, per poi eseguire il ```pip install```).
+
+### 3. Connessione e Avvio
+
+1. Apri il file app.py con il tuo editor di testo preferito (es. VS Code, PyCharm o Blocco Note).
+2. Alla riga 14, verifica che la stringa di connessione URI corrisponda alla password del tuo server PostgreSQL locale:
+   ```Python
+   app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:latuapassword@localhost/progetto_basi'
+   ```
+3. Torna sul terminale e avvia il server eseguendo:
+   ```bash
+   python app.py
+   ```
+4. Apri il browser e collegati all'indirizzo ```http://127.0.0.1:5000```.
