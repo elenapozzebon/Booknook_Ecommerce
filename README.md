@@ -71,7 +71,7 @@ Essendo una repository pubblica, il database fornito contiene solo la struttura 
 1. Apri il file app.py con il tuo editor di testo preferito (es. VS Code, PyCharm o Blocco Note).
 2. Alla riga 14, verifica che la stringa di connessione URI corrisponda alla password del tuo server PostgreSQL locale:
    ```Python
-   app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:latuapassword@localhost/progetto_basi'
+   app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:latuapassword@localhost/progettoBasi'
    ```
 3. Torna sul terminale e avvia il server eseguendo:
    ```bash
